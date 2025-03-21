@@ -77,11 +77,11 @@ if use_camera:
         else:
             st.warning("Fikk ikke tolket noe tekst fra bildet.")
             st.session_state.detected_num = 0
+    vekt_input = st.session_state.detected_num
 else:
     vekt_input = st.number_input("Vekt (kg)", value=st.session_state.detected_num, step=1)
 
 # Bruk det foreslåtte tallet (eller 0) i tallvelgeren – alltid redigerbar
-vekt_input = st.session_state.detected_num
 st.write(f"Registrert vekt: {vekt_input}")
 
 # Send til Sheets
