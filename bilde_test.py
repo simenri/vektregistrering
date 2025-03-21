@@ -1,14 +1,17 @@
-import streamlit as st
-from google.cloud import vision
-import io
-import os
 
-# Sett Google credentials
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google_sheet_creds.json"
+encoded_creds = st.secrets["google"]["google_credentials"]
+padding = len(encoded_creds) % 4
+if padding != 0: # Sjekker om den faktisk opprettholder kravet om at det skal være delelig på fire og legger på padding dersom det ikke er det.
+    encoded_creds += "=" * (4 - padding)
+creds_json = base64.b64decode(encoded_creds)
+with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
+    tmp_file.write(creds_json)
+    tmp_file_path = tmp_file.name
 
-st.title("Vektregistrering med bilde")
+# Sett miljøvariabelen til den midlertidige filen
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_file_path
 
-# Ta bilde med kamera
+
 img_file = st.camera_input("Ta bilde av vekta")
 
 if img_file is not None:

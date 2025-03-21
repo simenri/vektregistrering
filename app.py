@@ -6,6 +6,10 @@ from io import BytesIO
 from services.sheets_service import get_google_sheet
 from utils.helpers import get_todays_date, get_timestamp
 from components.batch_selector import render_batch_selector
+from components.empty_or_full_selector import render_empty_or_full_selector
+from components.aksel_selector import render_aksel_selector
+from components.ocr_camera_feature import render_ocr_camera_feature
+from services.environment_variable_service import set_enivronment_variable
 from google.cloud import vision
 import os
 import tempfile
@@ -31,7 +35,20 @@ st.markdown("<h2>Vektregistrering Carbon Centric AS</h2>", unsafe_allow_html=Tru
 custom_batch = render_batch_selector(dagens_batches, todays_date)
 st.write(f"Valgt batchnummer: {custom_batch}")
 
-vekt_input = st.number_input("Vekt (kg)", value=0)
+fyllingsgrad = render_empty_or_full_selector()
+weight_value = 0 # Set weight
+
+col1, col2 = st.columns(2)
+with col1:
+    aksel = render_aksel_selector()
+with col2: 
+    use_camera = st.button('Bildegjenkjenning')
+if use_camera:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = set_enivronment_variable()
+    weight_value = render_ocr_camera_feature()
+
+vekt_input = st.number_input("Vekt (kg)", value=weight_value)
+
 
 # Send til Sheets
 if st.button("Send inn"):
@@ -43,39 +60,5 @@ if st.button("Send inn"):
         st.error("Vennligst fyll inn alle felt")
 
 
-encoded_creds = st.secrets["google"]["google_credentials"]
-padding = len(encoded_creds) % 4
-if padding != 0: # Sjekker om den faktisk opprettholder kravet om at det skal være delelig på fire og legger på padding dersom det ikke er det.
-    encoded_creds += "=" * (4 - padding)
-creds_json = base64.b64decode(encoded_creds)
-with tempfile.NamedTemporaryFile(delete=False, suffix=".json") as tmp_file:
-    tmp_file.write(creds_json)
-    tmp_file_path = tmp_file.name
-
-# Sett miljøvariabelen til den midlertidige filen
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp_file_path
-
-
-img_file = st.camera_input("Ta bilde av vekta")
-
-if img_file is not None:
-    # Vis bilde
-    st.image(img_file)
-
-    # Lagre bildet midlertidig for Vision API
-    image_bytes = img_file.getvalue()
-    image = vision.Image(content=image_bytes)
-
-    # Initier Vision-klient
-    client = vision.ImageAnnotatorClient()
-    response = client.text_detection(image=image)
-
-    texts = response.text_annotations
-    if texts:
-        # Første element er hele teksten, resten er delene
-        detected_text = texts[0].description.strip()
-        st.success(f"Oppdaget tall: {detected_text}")
-    else:
-        st.warning("Fikk ikke tolket noe tall fra bildet.")
 
 st.markdown("<div class='footer'>© 2025 Carbon Centric AS | Vektregistrering </div>", unsafe_allow_html=True)

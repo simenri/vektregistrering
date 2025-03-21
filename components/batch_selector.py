@@ -2,7 +2,7 @@ import streamlit as st
 
 def render_batch_selector(dagens_batches, todays_date):
     if dagens_batches:
-        st.write(f"Foreslått batchnummer for i dag ({todays_date}):")
+        st.write(f"Dagens dato: {todays_date}")
         valgt_batch = st.selectbox("Velg batchnummer eller skriv inn eget:", options=dagens_batches + ["Annet"])
         
         if valgt_batch == "Annet":
