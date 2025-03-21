@@ -1,2 +1,3 @@
 venv/
 google_sheet_creds.json
+secrets.toml
