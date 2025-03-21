@@ -25,7 +25,10 @@ st.markdown("<h2>Vektregistrering Carbon Centric AS</h2>", unsafe_allow_html=Tru
 custom_batch = render_batch_selector(dagens_batches, todays_date)
 st.write(f"Valgt batchnummer: {custom_batch}")
 
-vekt_input = st.number_input("Vekt (kg)", value=0)
+input_html = """
+<input type="number" id="vekt_input" name="vekt_input" placeholder="Vekt (kg)" style="width: 100%; padding: 10px; font-size: 16px;">
+"""
+vekt_input = st.markdown(input_html, unsafe_allow_html=True)
 
 # Send til Sheets
 if st.button("Send inn"):
