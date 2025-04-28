@@ -28,8 +28,8 @@ batch_sheet = get_google_sheet("Tankbil-CC", "Batches")
 
 batch_info = batch_sheet.get_all_records()
 todays_date = get_todays_date()
+dagens_batches = [r['Batch ID'] for r in batch_info if r['Date of analysis'] == todays_date]
 
-dagens_batches = [r['Batch nr'] for r in batch_info if r['Dato for henting'] == todays_date]
 
 # UI
 st.markdown("<h2>Vektregistrering Carbon Centric AS</h2>", unsafe_allow_html=True)
