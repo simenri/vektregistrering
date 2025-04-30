@@ -91,6 +91,12 @@ if st.session_state.show_confirmation:
                 from services.upload_to_drive import upload_to_drive
                 filename = f"{timestamp}_{st.session_state.selected_batch}.jpg".replace(" ", "_")
                 try:
+                    st.write("Uploaded image info:")
+                    st.write({
+                        "name": st.session_state.uploaded_image.name,
+                        "type": st.session_state.uploaded_image.type,
+                        "size": len(st.session_state.uploaded_image.getvalue())
+                    })
                     file_id = upload_to_drive(
                         st.session_state.uploaded_image,
                         filename,
@@ -106,7 +112,7 @@ if st.session_state.show_confirmation:
 
             # Vis nedtelling
             with st.empty():
-                for i in range(3, 0, -1):
+                for i in range(10, 0, -1):
                     st.info(f"Returning to new form in {i} seconds...")
                     time.sleep(1)
 
