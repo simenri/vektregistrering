@@ -1,7 +1,7 @@
 import streamlit as st
 
 def render_proof_image_uploader():
-    st.markdown("### Optional: Upload a proof image (photo of the scale)")
+    st.markdown("##### Optional: Upload a proof image (photo of the scale)")
     uploaded_image = st.file_uploader("Take or upload a photo", type=["jpg", "jpeg", "png"])
     
     if uploaded_image:
