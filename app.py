@@ -46,14 +46,18 @@ for key, default in {
 # --- UI ---
 st.markdown("<h2>Weight Registration - Carbon Centric AS</h2>", unsafe_allow_html=True)
 
+# --- Select batch (outside form so it reacts immediately) ---
+st.session_state.selected_batch = render_batch_selector(available_batches, todays_date)
+
 # --- Input Form ---
 with st.form("registration_form"):
-    st.session_state.selected_batch = render_batch_selector(available_batches, todays_date)
     st.session_state.filling_status = render_empty_or_full_selector()
     st.session_state.axle = render_aksel_selector()
     st.session_state.weight_input = st.number_input("Weight (kg)", value=st.session_state.weight_input, step=1)
-    render_proof_image_uploader()
+
+    render_proof_image_uploader()  # om du bruker dette
     submitted = st.form_submit_button("Submit")
+
 
 if submitted:
     if all([
