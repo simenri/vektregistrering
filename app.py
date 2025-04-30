@@ -31,7 +31,8 @@ if "logged_in" not in st.session_state:
     st.session_state.name = ""
 
 if not st.session_state.logged_in:
-    st.title("Login")
+
+    st.title("Carbon Centric Weight Registration")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
