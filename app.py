@@ -20,6 +20,34 @@ def get_measurement_sheet():
 def get_batch_info():
     return get_google_sheet("Tankbil-CC", "Batches").get_all_records()
 
+@st.cache_data(ttl=300)
+def get_user_info():
+    return get_google_sheet("Tankbil-CC", "Users").get_all_records()
+
+# --- Login system ---
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+    st.session_state.username = ""
+    st.session_state.name = ""
+
+if not st.session_state.logged_in:
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Log in"):
+        users = get_user_info()
+        for user in users:
+            if user["username"] == username and user["password"] == password and str(user.get("valid", "TRUE")).upper() == "TRUE":
+                st.session_state.logged_in = True
+                st.session_state.username = username
+                st.session_state.name = user.get("name", username)
+                st.success(f"Welcome, {st.session_state.name}!")
+                st.rerun()
+        else:
+            st.error("Invalid username or password, or access not granted.")
+    st.stop()
+
 # Init
 sheet = get_measurement_sheet()
 batch_info = get_batch_info()
@@ -70,6 +98,7 @@ if st.session_state.show_confirmation:
         timestamp = get_timestamp()
         sheet.append_row([
             timestamp,
+            st.session_state.name,  # who submitted
             st.session_state.filling_status,
             st.session_state.axle,
             st.session_state.selected_batch,
