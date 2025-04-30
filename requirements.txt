@@ -10,12 +10,12 @@ DateTime==5.5
 gitdb==4.0.12
 GitPython==3.1.44
 google-api-core==2.24.2
+google-api-python-client==2.169.0
 google-auth==2.38.0
+google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.1
-google-cloud-vision==3.10.1
-googleapis-common-protos==1.69.2
-grpcio==1.71.0
-grpcio-status==1.71.0
+google-cloud==0.34.0
+googleapis-common-protos==1.70.0
 gspread==6.2.0
 httplib2==0.22.0
 idna==3.10
@@ -53,6 +53,7 @@ toml==0.10.2
 tornado==6.4.2
 typing_extensions==4.12.2
 tzdata==2025.1
+uritemplate==4.1.1
 urllib3==2.3.0
 watchdog==6.0.0
 zope.interface==7.2
