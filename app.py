@@ -90,11 +90,16 @@ if st.session_state.show_confirmation:
             if st.session_state.uploaded_image:
                 from services.upload_to_drive import upload_to_drive
                 filename = f"{timestamp}_{st.session_state.selected_batch}.jpg".replace(" ", "_")
-                upload_to_drive(
-                    st.session_state.uploaded_image,
-                    filename,
-                    folder_id=st.secrets["google"].get("drive_folder_id")
-                )
+                try:
+                    file_id = upload_to_drive(
+                        st.session_state.uploaded_image,
+                        filename,
+                        folder_id=st.secrets["google"].get("drive_folder_id")
+                    )
+                    drive_url = f"https://drive.google.com/file/d/{file_id}/view"
+                    st.success(f"✅ Image uploaded: [View in Drive]({drive_url})")
+                except Exception as e:
+                    st.warning(f"⚠️ Image upload failed: {e}")
 
             # Vis suksessmelding
             st.success("✅ Registration submitted!")
