@@ -91,12 +91,13 @@ if st.session_state.show_confirmation:
                 from services.upload_to_drive import upload_to_drive
                 filename = f"{timestamp}_{st.session_state.selected_batch}.jpg".replace(" ", "_")
                 try:
-                    st.write("Uploaded image info:")
-                    st.write({
-                        "name": st.session_state.uploaded_image.name,
-                        "type": st.session_state.uploaded_image.type,
-                        "size": len(st.session_state.uploaded_image.getvalue())
-                    })
+                    # st.write("Uploaded image info:")
+                    # st.write({
+                    #     "name": st.session_state.uploaded_image.name,
+                    #     "type": st.session_state.uploaded_image.type,
+                    #     "size": len(st.session_state.uploaded_image.getvalue())
+                    # })
+                    # st.write("drive_folder_id from secrets:", st.secrets["google"].get("drive_folder_id"))
                     file_id = upload_to_drive(
                         st.session_state.uploaded_image,
                         filename,

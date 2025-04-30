@@ -31,13 +31,13 @@ def upload_to_drive(file, filename, folder_id=None):
     if file_size == 0:
         raise ValueError("The uploaded file is empty!")
 
-    # Log file info for debug
-    st.write({
-        "Uploading file": filename,
-        "Mime type": mime_type,
-        "Size (bytes)": file_size,
-        "To folder": folder_id
-    })
+    # # Log file info for debug
+    # st.write({
+    #     "Uploading file": filename,
+    #     "Mime type": mime_type,
+    #     "Size (bytes)": file_size,
+    #     "To folder": folder_id
+    # })
 
     # Step 5: Upload
     media = MediaIoBaseUpload(io.BytesIO(file_bytes), mimetype=mime_type)
